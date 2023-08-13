@@ -1,10 +1,21 @@
 import { Box, ChakraProvider } from '@chakra-ui/react'
+import { StrictMode } from 'react'
 
-function App() {
+import { Header } from './components/Header'
+import { IncomeExpenseForm } from './components/IncomeExpenseForm'
+import { IncomeExpenseList } from './components/IncomeExpenseList'
+import { IncomeExpensePieChart } from './components/IncomeExpensePieChart'
+import { MonthlyBalance } from './components/MonthlyBalance'
+import { ContentContainer } from './layouts/ContentContainer'
+import { IncomeExpense } from './pages/IncomeExpense'
+
+const App: React.FC = () => {
   return (
-    <ChakraProvider>
-      <Box>my-budget-app作る</Box>
-    </ChakraProvider>
+    <StrictMode>
+      <ChakraProvider>
+        <IncomeExpense />
+      </ChakraProvider>
+    </StrictMode>
   )
 }
 
