@@ -1,11 +1,23 @@
 import { Box, Flex, HStack, Stack, Text } from '@chakra-ui/react'
 
+import { Item, useIncomeExpense } from '../hooks/useIncomeExpense'
+import { IncomeExpensePieChart } from './IncomeExpensePieChart'
+
 type ContainerProps = Props
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+type Props = {
+  // currentMonth: ReturnType<typeof useIncomeExpense>['currentMonth']
+  // currentYear: ReturnType<typeof useIncomeExpense>['currentYear']
+  currentDate: Date
+  handleLastMonthClick: ReturnType<typeof useIncomeExpense>['handleLastMonthClick']
+  handleNextMonthClick: ReturnType<typeof useIncomeExpense>['handleNextMonthClick']
+  // incomeItems: Item[]
+  // expenseItems: Item[]
+  // incomExpenseAmount: number
+}
 
-const Component = () => {
+const Component: React.FC<Props> = (props) => {
   return (
     <Stack>
       <Flex justify={'start'}>
@@ -13,23 +25,26 @@ const Component = () => {
           MyBudgetApp
         </Text>
       </Flex>
-      {/* <Box> */}
-      <HStack fontSize={'30px'} justifyContent={'center'}>
-        <Text as={'span'} cursor={'pointer'} onClick={() => alert('前月')}>
+
+      <HStack fontSize={'40px'} justifyContent={'center'}>
+        <Text as={'span'} cursor={'pointer'} onClick={props.handleLastMonthClick}>
           ◀︎
         </Text>
-        <Text mx={'0.5em'}>2023年07月</Text>
-        <Text as={'span'} cursor={'pointer'} onClick={() => alert('次月')}>
+        {/* <Text mx={'0.5em'}>2023年07月</Text> */}
+        {/* <Text mx={'0.5em'}>{`${props.currentYear}年${props.currentMonth}月`}</Text> */}
+        <Text mx={'0.5em'}>{`${props.currentDate.getFullYear()}年${
+          props.currentDate.getMonth() + 1
+        }月`}</Text>
+        <Text as={'span'} cursor={'pointer'} onClick={props.handleNextMonthClick}>
           ▶︎
         </Text>
       </HStack>
-      {/* </Box> */}
     </Stack>
   )
 }
 
-const Container = () => {
-  return <Component />
+const Container: React.FC<ContainerProps> = (props) => {
+  return <Component {...props} />
 }
 
 export const Header = Container

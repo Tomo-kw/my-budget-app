@@ -1,35 +1,58 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import { Cell, Pie, PieChart } from 'recharts'
 
-type ContainerProps = Props
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {}
+import { Item } from '../hooks/useIncomeExpense'
+
+type ContainerProps = Omit<Props, 'expenseItemsCount' | 'incomeItemsCount'>
+
+type Props = {
+  expenseItems: Item[]
+  expenseItemsCount: { [key: string]: number }
+  incomeItems: Item[]
+  incomeItemsCount: { [key: string]: number }
+}
 
 // TODO:valueに各項目の値を渡す・データは固定 props名で判定
-const Component = () => {
+const Component: React.FC<Props> = (props) => {
   // 表示させたいデータ群
-  const data = [
-    {
-      index: 0,
-      name: 'データ1',
-      value: 300,
-    },
-    {
-      index: 1,
-      name: 'データ2',
-      value: 200,
-    },
-    {
-      index: 2,
-      name: 'データ3',
-      value: 380,
-    },
-    {
-      index: 3,
-      name: 'データ4',
-      value: 80,
-    },
-  ]
+  const expenseData = Object.entries(props.expenseItemsCount).map((item, index) => {
+    return {
+      index: index,
+      name: item[0],
+      value: item[1],
+    }
+  })
+
+  const incomeData = Object.entries(props.incomeItemsCount).map((item, index) => {
+    return {
+      index: index,
+      name: item[0],
+      value: item[1],
+    }
+  })
+
+  // const data = [
+  //   {
+  //     index: 0,
+  //     name: 'データ1',
+  //     value: 300,
+  //   },
+  //   {
+  //     index: 1,
+  //     name: 'データ2',
+  //     value: 200,
+  //   },
+  //   {
+  //     index: 2,
+  //     name: 'データ3',
+  //     value: 380,
+  //   },
+  //   {
+  //     index: 3,
+  //     name: 'データ4',
+  //     value: 80,
+  //   },
+  // ]
 
   // 円グラフの各領域の色を定義
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
@@ -42,19 +65,18 @@ const Component = () => {
       {/* 支出エリア */}
       <VStack>
         <Text as={'h3'}>支出一覧</Text>
-        <Box>円グラフ</Box>
-        <PieChart height={250} width={400}>
+        <PieChart height={300} width={400}>
           <Pie
             cx={'50%'}
             cy={'50%'}
-            data={data}
+            data={expenseData}
             dataKey="value"
             fill="#82ca9d"
             label={renderLabel}
             outerRadius={100}
             // labelLine={true}
           >
-            {data.map((entry, index) => (
+            {expenseData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
@@ -63,17 +85,59 @@ const Component = () => {
       {/* 収入エリア */}
       <VStack>
         <Text as={'h3'}>収入一覧</Text>
-        <Box>円グラフ</Box>
-        <PieChart height={250} width={400}>
-          <Pie cx={'50%'} cy={'50%'} data={data} dataKey="value" fill="#82ca9d" outerRadius={100} />
+        <PieChart height={300} width={400}>
+          <Pie
+            cx={'50%'}
+            cy={'50%'}
+            data={incomeData}
+            dataKey="value"
+            fill="#82ca9d"
+            label={renderLabel}
+            outerRadius={100}
+          >
+            {incomeData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
         </PieChart>
       </VStack>
     </HStack>
   )
 }
 
-const Container = () => {
-  return <Component />
+const Container: React.FC<ContainerProps> = (props) => {
+  const expenseCategoryTotal: { [key: string]: number } = {}
+  const incomeCategoryTotal: { [key: string]: number } = {}
+
+  /**
+   * 支出のカテゴリごとの金額を集計
+   */
+  props.expenseItems.map((item) => {
+    if (!expenseCategoryTotal[item.category]) {
+      expenseCategoryTotal[item.category] = 0
+    }
+
+    expenseCategoryTotal[item.category] += item.amount
+  })
+
+  /**
+   * 収入のカテゴリごとの金額を集計
+   */
+  props.incomeItems.map((item) => {
+    if (!incomeCategoryTotal[item.category]) {
+      incomeCategoryTotal[item.category] = 0
+    }
+
+    incomeCategoryTotal[item.category] += item.amount
+  })
+
+  return (
+    <Component
+      {...props}
+      expenseItemsCount={expenseCategoryTotal}
+      incomeItemsCount={incomeCategoryTotal}
+    />
+  )
 }
 
 export const IncomeExpensePieChart = Container
