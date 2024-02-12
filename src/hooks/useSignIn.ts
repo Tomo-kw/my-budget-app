@@ -1,6 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { auth } from '../firebase'
 
@@ -9,6 +10,7 @@ export const useSignIn = () => {
   const [password, setPassword] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const toast = useToast()
+  const navigate = useNavigate()
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
@@ -23,6 +25,7 @@ export const useSignIn = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('ログインOK')
+
         toast({
           duration: 9000,
           isClosable: true,
@@ -30,6 +33,7 @@ export const useSignIn = () => {
           status: 'success',
           title: 'ログインしました',
         })
+        navigate('/')
       })
       .catch((error) => {
         const errorCode = error.code

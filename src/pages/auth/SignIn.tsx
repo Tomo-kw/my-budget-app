@@ -22,9 +22,7 @@ type Props = {
 const Component = (props: Props) => (
   <form onSubmit={props.handleSubmit}>
     <Box color={'#7d7d7d'} m={'0 auto'} maxW={'500px'} mb={'2rem'} mt={'3rem'} textAlign={'center'}>
-      <Text as="h1" fontSize={'100px'}>
-        SIGN IN
-      </Text>
+      <Text fontSize={'100px'}>SIGN IN</Text>
       <VStack>
         <VStack gap={'1rem'}>
           <Box>
@@ -66,6 +64,7 @@ const Container: React.FC = () => {
     useSignIn()
 
   const { user } = useContext(AuthContext)
+  console.log('signin', user)
 
   return (
     <Component

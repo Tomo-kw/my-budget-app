@@ -25,7 +25,7 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('user')
+        console.log('userAuthProviders', user)
         setUser({ user })
       } else {
         setUser({ user: null })
