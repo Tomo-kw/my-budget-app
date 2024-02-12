@@ -3,11 +3,11 @@
 import { collection, doc, getDocs } from 'firebase/firestore'
 import { Dispatch, SetStateAction } from 'react'
 
-import { Header } from '../components/Header'
 import { IncomeExpenseForm } from '../components/IncomeExpenseForm'
 import { IncomeExpenseList } from '../components/IncomeExpenseList'
 import { IncomeExpensePieChart } from '../components/IncomeExpensePieChart'
 import { MonthlyBalance } from '../components/MonthlyBalance'
+import { YearMonthDisplay } from '../components/YearMonthDisplay'
 import { db } from '../firebase'
 import { DisplayType, Item, useIncomeExpense } from '../hooks/useIncomeExpense'
 import { ContentContainer } from '../layouts/ContentContainer'
@@ -18,27 +18,27 @@ type ContainerProps = {
 
 type Props = {
   category: ReturnType<typeof useIncomeExpense>['category']
+  currentDate: Date
   // currentMonth: ReturnType<typeof useIncomeExpense>['currentMonth']
   // currentYear: ReturnType<typeof useIncomeExpense>['currentYear']
   currentDisplayType: ReturnType<typeof useIncomeExpense>['currentDisplayType']
-  handleSubmitClick: ReturnType<typeof useIncomeExpense>['handleSubmitClick']
   expenseItems: Item[]
-  handleLastMonthClick: ReturnType<typeof useIncomeExpense>['handleLastMonthClick']
   handleExpenseDeleteClick: ReturnType<typeof useIncomeExpense>['handleExpenseDeleteClick']
   handleIncomeDeleteClick: ReturnType<typeof useIncomeExpense>['handleIncomeDeleteClick']
-  incomeItems: Item[]
+  handleLastMonthClick: ReturnType<typeof useIncomeExpense>['handleLastMonthClick']
   handleNextMonthClick: ReturnType<typeof useIncomeExpense>['handleNextMonthClick']
-  currentDate: Date
+  handleSubmitClick: ReturnType<typeof useIncomeExpense>['handleSubmitClick']
+  incomeItems: Item[]
   setAmount: Dispatch<SetStateAction<number>>
   setCategory: Dispatch<SetStateAction<string>>
-  setType: Dispatch<SetStateAction<string>>
   setCurrentDisplayType: Dispatch<SetStateAction<DisplayType>>
+  setType: Dispatch<SetStateAction<string>>
 }
 
 // 以下でデータを渡す
 const Component = (props: Props) => (
   <ContentContainer>
-    <Header
+    <YearMonthDisplay
       // currentYear={props.currentYear}
       // currentMonth={props.currentMonth}
       currentDate={props.currentDate}
@@ -47,7 +47,7 @@ const Component = (props: Props) => (
       // incomeItems={props.incomeItems}
       // expenseItems={props.expenseItems}
     />
-    <MonthlyBalance incomeItems={props.incomeItems} expenseItems={props.expenseItems} />
+    <MonthlyBalance expenseItems={props.expenseItems} incomeItems={props.incomeItems} />
     <IncomeExpenseForm
       category={props.category}
       currentDisplayType={props.currentDisplayType}
@@ -60,8 +60,8 @@ const Component = (props: Props) => (
     <IncomeExpensePieChart expenseItems={props.expenseItems} incomeItems={props.incomeItems} />
     <IncomeExpenseList
       expenseItems={props.expenseItems}
-      handleIncomeDeleteClick={props.handleIncomeDeleteClick}
       handleExpenseDeleteClick={props.handleExpenseDeleteClick}
+      handleIncomeDeleteClick={props.handleIncomeDeleteClick}
       incomeItems={props.incomeItems}
     />
   </ContentContainer>
@@ -72,16 +72,16 @@ const Component = (props: Props) => (
 const Container: React.FC<ContainerProps> = () => {
   const {
     category,
+    currentDate,
     currentDisplayType,
     currentMonth,
     currentYear,
-    currentDate,
     expenseItems,
-    handleSubmitClick,
-    handleNextMonthClick,
-    handleLastMonthClick,
     handleExpenseDeleteClick,
     handleIncomeDeleteClick,
+    handleLastMonthClick,
+    handleNextMonthClick,
+    handleSubmitClick,
     incomeItems,
     setAmount,
     setCategory,
