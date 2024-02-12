@@ -22,9 +22,7 @@ const Component: React.FC<Props> = (props) => {
       maxW={'1000px'}
       p={'30px'}
     >
-      <Text as={'h1'} fontSize={'44px'}>
-        MyBudgetApp
-      </Text>
+      <Text fontSize={'44px'}>MyBudgetApp</Text>
       {props.user ? (
         <Button bg={'orange.400'} color={'#7d7d7d'} onClick={props.handleSubmit}>
           SIGN OUT
