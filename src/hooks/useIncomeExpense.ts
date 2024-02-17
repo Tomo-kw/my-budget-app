@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react'
 import {
   addDoc,
   collection,
@@ -15,7 +16,7 @@ import {
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 
-import { db } from '../firebase'
+import { auth, db } from '../firebase'
 
 export type DisplayType = 'expense' | 'income'
 
@@ -43,6 +44,8 @@ export const useIncomeExpense = () => {
 
   // 現在の日付
   const [currentDate, setCurrentDate] = useState(new Date())
+
+  const toast = useToast()
 
   // 現在の日付から月初・月末を求める方法→関数を作れば良い？
   // 更新後も月を±すればそのまま
@@ -78,6 +81,7 @@ export const useIncomeExpense = () => {
     const incomeData = collection(db, 'incomeItems')
     const qi = query(
       incomeData,
+      where('uid', '==', auth.currentUser?.uid.toString()),
       orderBy('timestamp', 'asc'),
       startAt(getStartDate(currentDate)),
       endAt(getEndDate(currentDate))
@@ -106,6 +110,7 @@ export const useIncomeExpense = () => {
     const expenseData = collection(db, 'expenseItems')
     const qe = query(
       expenseData,
+      where('uid', '==', auth.currentUser!.uid.toString()),
       orderBy('timestamp', 'asc'),
       startAt(getStartDate(currentDate)),
       endAt(getEndDate(currentDate))
@@ -155,6 +160,7 @@ export const useIncomeExpense = () => {
 
   // 収支の登録処理
   const handleSubmitClick = () => {
+    auth.currentUser!.uid
     // firebaseのデータベースにデータを追加する
     // e.preventDefault()
     let seveDb = ''
@@ -168,6 +174,15 @@ export const useIncomeExpense = () => {
       amount: amount,
       category: category,
       timestamp: serverTimestamp(),
+      uid: auth.currentUser?.uid,
+    })
+
+    toast({
+      duration: 9000,
+      isClosable: true,
+      position: 'top',
+      status: 'success',
+      title: '登録しました',
     })
   }
 
@@ -188,14 +203,27 @@ export const useIncomeExpense = () => {
   // 支出データを削除する
   const handleExpenseDeleteClick = async (id: string) => {
     await deleteDoc(doc(db, 'expenseItems', id))
+    toast({
+      duration: 9000,
+      isClosable: true,
+      position: 'top',
+      status: 'error',
+      title: '削除しました',
+    })
   }
 
   // 収入データを削除する
   const handleIncomeDeleteClick = async (id: string) => {
     await deleteDoc(doc(db, 'incomeItems', id))
+    toast({
+      duration: 9000,
+      isClosable: true,
+      position: 'top',
+      status: 'error',
+      title: '削除しました',
+    })
   }
 
-  //
   return {
     category,
     currentDate,
