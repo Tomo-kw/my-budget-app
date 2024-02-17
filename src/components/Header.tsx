@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { Button, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Heading, Text } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import { useContext } from 'react'
 
 import { AuthContext } from '../auth/AuthProvider'
 import { useSignOut } from '../hooks/useSignOut'
-type ContainerProps = {}
+// type ContainerProps = {}
 
 type Props = {
   handleSubmit: ReturnType<typeof useSignOut>['handleSubmit']
@@ -22,7 +21,13 @@ const Component: React.FC<Props> = (props) => {
       maxW={'1000px'}
       p={'30px'}
     >
-      <Text fontSize={'44px'}>MyBudgetApp</Text>
+      <Text color={'pink.400'} fontSize={'44px'}>
+        MyBudgetApp
+      </Text>
+      <Box fontSize={'20px'} color={'gray.500'}>
+        <Text>ログインユーザー</Text>
+        <Text>{props.user?.email}</Text>
+      </Box>
       {props.user ? (
         <Button bg={'orange.400'} color={'#7d7d7d'} onClick={props.handleSubmit}>
           SIGN OUT
@@ -34,7 +39,7 @@ const Component: React.FC<Props> = (props) => {
   )
 }
 
-const Container: React.FC<ContainerProps> = (props) => {
+const Container: React.FC = (props) => {
   const { handleSubmit } = useSignOut()
   const { user } = useContext(AuthContext)
 

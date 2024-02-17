@@ -1,4 +1,4 @@
-import { Box, Button, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Input, Link, Text, VStack } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import { useContext } from 'react'
 
@@ -50,6 +50,9 @@ const Component = (props: Props) => (
         </VStack>
         <Button bg={'red.500'} color={'#fff'} mt={'2rem'} type="submit">
           SIGN UP
+        </Button>
+        <Button bg={'green.500'} color={'#fff'} mt={'2rem'}>
+          <Link href="/signin">SIGN IN</Link>
         </Button>
       </VStack>
     </Box>

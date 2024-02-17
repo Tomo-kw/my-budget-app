@@ -1,11 +1,13 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { auth } from '../firebase'
 
 export const useSignUp = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const navigate = useNavigate()
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
@@ -20,6 +22,7 @@ export const useSignUp = () => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('登録OK')
+        navigate('/')
       })
       .catch((error) => {
         const errorCode = error.code
