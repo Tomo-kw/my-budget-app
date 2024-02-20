@@ -1,15 +1,24 @@
 import { useContext } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { IncomeExpense } from '../pages/IncomeExpense'
 import { AuthContext } from './AuthProvider'
 
 const PrivateRoute = () => {
-  const { user } = useContext(AuthContext)
+  const { isAuthChecked, loginUser } = useContext(AuthContext)
 
-  console.log('PrivateRoute', user)
-
-  return user ? <IncomeExpense /> : <Navigate to={'/signin'} />
+  return (
+    <>
+      {isAuthChecked ? (
+        loginUser ? (
+          <IncomeExpense />
+        ) : (
+          <Navigate to={'/signin'} />
+        )
+      ) : // ログイン状態のチェックがまだ完了していない場合、何も表示しない
+      null}
+    </>
+  )
 }
 
 export default PrivateRoute

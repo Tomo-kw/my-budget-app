@@ -24,13 +24,12 @@ const Component = (props: Props) => {
           onChange={(e) => props.setCurrentDisplayType(e.target.value as DisplayType)}
           value={props.currentDisplayType}
         >
-          <option value={'expence'}>支出</option>
+          <option value={'expense'}>支出</option>
           <option value={'income'}>収入</option>
         </Select>
       </VStack>
       <VStack>
         <Text>カテゴリ</Text>
-        {/* TODO:選択した収支によって表示カテゴリを切り替える */}
         {/* 支出 */}
         {props.currentDisplayType === 'expense' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
@@ -46,20 +45,18 @@ const Component = (props: Props) => {
           </Select>
         )}
         {/* 収入 */}
-        {/* <Select placeholder="Select option"> */}
         {props.currentDisplayType === 'income' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
             <option value="給料">給料</option>
             <option value="その他">その他</option>
           </Select>
         )}
-        {/* 選択した収支によって表示するカテゴリを変える */}
       </VStack>
       <VStack>
         <Text>金額</Text>
-        <Input onChange={(e) => props.setAmount(Number(e.target.value))} type="text" />
+        <Input onChange={(e) => props.setAmount(Number(e.target.value))} type="number" />
       </VStack>
-      <Button onClick={props.handleSubmitClick} type="submit">
+      <Button bg={'green.400'} color={'#fff'} onClick={props.handleSubmitClick} type="submit">
         登録
       </Button>
     </HStack>

@@ -4,11 +4,13 @@ import { createContext, useEffect, useState } from 'react'
 import { auth } from '../firebase'
 
 export type GlobalAuthLoginState = {
-  user: User | null
+  isAuthChecked: boolean
+  loginUser: User | null
 }
 
 const initialLoginState: GlobalAuthLoginState = {
-  user: null,
+  isAuthChecked: false,
+  loginUser: null,
 }
 
 type Props = {
@@ -19,22 +21,26 @@ const AuthContext = createContext<GlobalAuthLoginState>(initialLoginState)
 
 // 認証状態をグローバルに管理するProvider
 const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<GlobalAuthLoginState>(initialLoginState)
+  const [loginUser, setLoginUser] = useState<User | null>(initialLoginState.loginUser)
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false)
 
   // 初回アクセス時に認証済みかをチェック
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('userAuthProviders', user)
-        setUser({ user })
+        setLoginUser(user)
       } else {
-        setUser({ user: null })
+        setLoginUser(user)
         console.log('no user')
       }
+      setIsAuthChecked(true)
     })
   }, [])
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ isAuthChecked, loginUser }}>{children}</AuthContext.Provider>
+  )
 }
 
 export { AuthContext, AuthProvider }
