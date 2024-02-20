@@ -63,7 +63,7 @@ export const useIncomeExpense = () => {
   const [amount, setAmount] = useState<number>(0)
 
   // 収入・支出のどちらか
-  const [type, setType] = useState<string>('expence')
+  const [type, setType] = useState<string>('expense')
 
   const [category, setCategory] = useState<string>('食費')
 

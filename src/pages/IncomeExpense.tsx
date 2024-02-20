@@ -88,10 +88,6 @@ const Container: React.FC<ContainerProps> = () => {
     setCurrentDisplayType,
     setType,
   } = useIncomeExpense()
-  // const incomeItems = collection(db, 'incomeItems')
-  // getDocs(incomeItems).then((querySnapshots) => {
-  //   console.log(querySnapshots.docs.map((doc) => doc.data()))
-  // })
 
   return (
     <Component

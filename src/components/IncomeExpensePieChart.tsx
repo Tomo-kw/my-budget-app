@@ -31,33 +31,42 @@ const Component: React.FC<Props> = (props) => {
     }
   })
 
-  // const data = [
-  //   {
-  //     index: 0,
-  //     name: 'データ1',
-  //     value: 300,
-  //   },
-  //   {
-  //     index: 1,
-  //     name: 'データ2',
-  //     value: 200,
-  //   },
-  //   {
-  //     index: 2,
-  //     name: 'データ3',
-  //     value: 380,
-  //   },
-  //   {
-  //     index: 3,
-  //     name: 'データ4',
-  //     value: 80,
-  //   },
-  // ]
-
   // 円グラフの各領域の色を定義
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
-  const renderLabel = ({ name }: any) => {
-    return name
+  // const renderLabel = ({ name }: any) => {
+  //   return name
+  // }
+
+  const RADIAN = Math.PI / 180
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    index,
+    innerRadius,
+    midAngle,
+    name,
+    outerRadius,
+    percent,
+  }: {
+    cx: number
+    cy: number
+    index: number
+    innerRadius: number
+    midAngle: number
+    name: string
+    outerRadius: number
+    percent: number
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+    return (
+      <text dominantBaseline="central" fill="white" textAnchor="middle" x={x} y={y}>
+        {name}
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    )
   }
 
   return (
@@ -72,9 +81,9 @@ const Component: React.FC<Props> = (props) => {
             data={expenseData}
             dataKey="value"
             fill="#82ca9d"
-            label={renderLabel}
-            outerRadius={100}
-            // labelLine={true}
+            label={renderCustomizedLabel}
+            labelLine={false}
+            outerRadius={150}
           >
             {expenseData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -92,8 +101,9 @@ const Component: React.FC<Props> = (props) => {
             data={incomeData}
             dataKey="value"
             fill="#82ca9d"
-            label={renderLabel}
-            outerRadius={100}
+            label={renderCustomizedLabel}
+            labelLine={false}
+            outerRadius={150}
           >
             {incomeData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

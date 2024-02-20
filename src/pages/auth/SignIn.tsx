@@ -6,7 +6,6 @@ import { AuthContext } from '../../auth/AuthProvider'
 import { useSignIn } from '../../hooks/useSignIn'
 // ______________________________________________________
 //
-type ContainerProps = Props
 
 type Props = {
   email: ReturnType<typeof useSignIn>['email']
@@ -14,8 +13,8 @@ type Props = {
   handlePasswordChange: ReturnType<typeof useSignIn>['handlePasswordChange']
   handleSubmit: ReturnType<typeof useSignIn>['handleSubmit']
   isLoading: ReturnType<typeof useSignIn>['isLoading']
+  loginUser: User | null
   password: ReturnType<typeof useSignIn>['password']
-  user: User | null
 }
 // ______________________________________________________
 //
@@ -66,8 +65,7 @@ const Container: React.FC = () => {
   const { email, handleEmailChange, handlePasswordChange, handleSubmit, isLoading, password } =
     useSignIn()
 
-  const { user } = useContext(AuthContext)
-  console.log('signin', user)
+  const { loginUser } = useContext(AuthContext)
 
   return (
     <Component
@@ -76,8 +74,8 @@ const Container: React.FC = () => {
       handlePasswordChange={handlePasswordChange}
       handleSubmit={handleSubmit}
       isLoading={isLoading}
+      loginUser={loginUser}
       password={password}
-      user={user}
     />
   )
 }

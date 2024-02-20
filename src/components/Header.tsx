@@ -4,11 +4,10 @@ import { useContext } from 'react'
 
 import { AuthContext } from '../auth/AuthProvider'
 import { useSignOut } from '../hooks/useSignOut'
-// type ContainerProps = {}
 
 type Props = {
   handleSubmit: ReturnType<typeof useSignOut>['handleSubmit']
-  user: User | null
+  loginUser: User | null
 }
 
 const Component: React.FC<Props> = (props) => {
@@ -24,11 +23,11 @@ const Component: React.FC<Props> = (props) => {
       <Text color={'pink.400'} fontSize={'44px'}>
         MyBudgetApp
       </Text>
-      <Box fontSize={'20px'} color={'gray.500'}>
+      <Box color={'gray.500'} fontSize={'20px'}>
         <Text>ログインユーザー</Text>
-        <Text>{props.user?.email}</Text>
+        <Text>{props.loginUser?.email}</Text>
       </Box>
-      {props.user ? (
+      {props.loginUser ? (
         <Button bg={'orange.400'} color={'#7d7d7d'} onClick={props.handleSubmit}>
           SIGN OUT
         </Button>
@@ -41,9 +40,9 @@ const Component: React.FC<Props> = (props) => {
 
 const Container: React.FC = (props) => {
   const { handleSubmit } = useSignOut()
-  const { user } = useContext(AuthContext)
+  const { loginUser } = useContext(AuthContext)
 
-  return <Component {...props} handleSubmit={handleSubmit} user={user} />
+  return <Component {...props} handleSubmit={handleSubmit} loginUser={loginUser} />
 }
 
 export const Header = Container

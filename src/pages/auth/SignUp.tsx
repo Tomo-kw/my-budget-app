@@ -6,15 +6,14 @@ import { AuthContext } from '../../auth/AuthProvider'
 import { useSignUp } from '../../hooks/useSignUp'
 // ______________________________________________________
 //
-type ContainerProps = Props
 
 type Props = {
   email: ReturnType<typeof useSignUp>['email']
   handleEmailChange: ReturnType<typeof useSignUp>['handleEmailChange']
   handlePasswordChange: ReturnType<typeof useSignUp>['handlePasswordChange']
   handleSubmit: ReturnType<typeof useSignUp>['handleSubmit']
+  loginUser: User | null
   password: ReturnType<typeof useSignUp>['password']
-  user: User | null
 }
 // ______________________________________________________
 //
@@ -63,7 +62,7 @@ const Component = (props: Props) => (
 
 const Container: React.FC = () => {
   const { email, handleEmailChange, handlePasswordChange, handleSubmit, password } = useSignUp()
-  const { user } = useContext(AuthContext)
+  const { loginUser } = useContext(AuthContext)
 
   return (
     <Component
@@ -71,8 +70,8 @@ const Container: React.FC = () => {
       handleEmailChange={handleEmailChange}
       handlePasswordChange={handlePasswordChange}
       handleSubmit={handleSubmit}
+      loginUser={loginUser}
       password={password}
-      user={user}
     />
   )
 }

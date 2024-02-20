@@ -17,7 +17,9 @@ const Component: React.FC<Props> = (props) => {
     <HStack alignItems={'flex-start'} gap={'10'} justifyContent={'center'}>
       <VStack>
         <HStack>
-          <Text fontSize={'24px'}>支出一覧</Text>
+          <Text fontSize={'24px'} fontWeight={'bold'}>
+            支出一覧
+          </Text>
         </HStack>
         {props.expenseItems.length > 0 &&
           props.expenseItems.map((item) => (
@@ -29,7 +31,9 @@ const Component: React.FC<Props> = (props) => {
                 <Text as={'span'}>円</Text>
               </Text>
               <Box onClick={() => props.handleExpenseDeleteClick(item.id)}>
-                <Button>削除</Button>
+                <Button bg={'red.400'} color={'#fff'}>
+                  削除
+                </Button>
               </Box>
             </HStack>
           ))}
@@ -49,7 +53,9 @@ const Component: React.FC<Props> = (props) => {
                 <Text as={'span'}>円</Text>
               </Text>
               <Box onClick={() => props.handleIncomeDeleteClick(item.id)}>
-                <Button>削除</Button>
+                <Button bg={'red.400'} color={'#fff'}>
+                  削除
+                </Button>
               </Box>
             </HStack>
           ))}
