@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   endAt,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -20,7 +19,6 @@ import { auth, db } from '../firebase'
 
 export type DisplayType = 'expense' | 'income'
 
-// 型ファイル作る？
 export type Item = {
   amount: number
   category: string
@@ -47,9 +45,6 @@ export const useIncomeExpense = () => {
 
   const toast = useToast()
 
-  // 現在の日付から月初・月末を求める方法→関数を作れば良い？
-  // 更新後も月を±すればそのまま
-
   // 表示する年
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
 
@@ -75,7 +70,8 @@ export const useIncomeExpense = () => {
 
     // 支出
     getExpenseData()
-  }, [currentDate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const getIncomData = () => {
     const incomeData = collection(db, 'incomeItems')
@@ -162,12 +158,22 @@ export const useIncomeExpense = () => {
   const handleSubmitClick = () => {
     auth.currentUser!.uid
     // firebaseのデータベースにデータを追加する
-    // e.preventDefault()
     let seveDb = ''
     if (currentDisplayType === 'expense') {
       seveDb = 'expenseItems'
     } else {
       seveDb = 'incomeItems'
+    }
+
+    if (amount <= 0) {
+      toast({
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+        status: 'error',
+        title: '金額を入力してください',
+      })
+      return
     }
 
     addDoc(collection(db, seveDb), {
@@ -176,6 +182,8 @@ export const useIncomeExpense = () => {
       timestamp: serverTimestamp(),
       uid: auth.currentUser?.uid,
     })
+
+    setAmount(0)
 
     toast({
       duration: 9000,
@@ -225,6 +233,7 @@ export const useIncomeExpense = () => {
   }
 
   return {
+    amount,
     category,
     currentDate,
     currentDisplayType,

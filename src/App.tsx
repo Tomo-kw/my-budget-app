@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import { StrictMode } from 'react'
+import React, { StrictMode } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { AuthProvider } from './auth/AuthProvider'

@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Text } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 
 import { AuthContext } from '../auth/AuthProvider'
 import { useSignOut } from '../hooks/useSignOut'

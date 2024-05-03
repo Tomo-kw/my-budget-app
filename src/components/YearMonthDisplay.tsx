@@ -5,10 +5,7 @@ import { IncomeExpensePieChart } from './IncomeExpensePieChart'
 
 type ContainerProps = Props
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = {
-  // currentMonth: ReturnType<typeof useIncomeExpense>['currentMonth']
-  // currentYear: ReturnType<typeof useIncomeExpense>['currentYear']
   currentDate: Date
   handleLastMonthClick: ReturnType<typeof useIncomeExpense>['handleLastMonthClick']
   handleNextMonthClick: ReturnType<typeof useIncomeExpense>['handleNextMonthClick']

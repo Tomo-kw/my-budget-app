@@ -6,6 +6,7 @@ import { DisplayType, useIncomeExpense } from '../hooks/useIncomeExpense'
 type ContainerProps = Props
 
 type Props = {
+  amount: number
   category: string
   currentDisplayType: DisplayType
   handleSubmitClick: ReturnType<typeof useIncomeExpense>['handleSubmitClick']
@@ -14,6 +15,9 @@ type Props = {
   setCurrentDisplayType: Dispatch<SetStateAction<DisplayType>>
   setType: Dispatch<SetStateAction<string>>
 }
+
+const expenseList = ['食費', '日用品', '交通費', '衣類', '交際費', '趣味', '貯金', 'その他']
+const incomeList = ['給料', 'その他']
 
 const Component = (props: Props) => {
   return (
@@ -33,28 +37,31 @@ const Component = (props: Props) => {
         {/* 支出 */}
         {props.currentDisplayType === 'expense' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
-            {/* TODO:配列にまとめる */}
-            <option value="食費">食費</option>
-            <option value="日用品">日用品</option>
-            <option value="交通費">交通費</option>
-            <option value="衣類">衣類</option>
-            <option value="交際費">交際費</option>
-            <option value="趣味">趣味</option>
-            <option value="貯金">貯金</option>
-            <option value="その他">その他</option>
+            {expenseList.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </Select>
         )}
         {/* 収入 */}
         {props.currentDisplayType === 'income' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
-            <option value="給料">給料</option>
-            <option value="その他">その他</option>
+            {incomeList.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </Select>
         )}
       </VStack>
       <VStack>
         <Text>金額</Text>
-        <Input onChange={(e) => props.setAmount(Number(e.target.value))} type="number" />
+        <Input
+          onChange={(e) => props.setAmount(Number(e.target.value))}
+          type="number"
+          value={props.amount}
+        />
       </VStack>
       <Button bg={'green.400'} color={'#fff'} onClick={props.handleSubmitClick} type="submit">
         登録

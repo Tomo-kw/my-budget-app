@@ -1,6 +1,5 @@
 // ______________________________________________________
 
-import { collection, doc, getDocs } from 'firebase/firestore'
 import { Dispatch, SetStateAction } from 'react'
 
 import { IncomeExpenseForm } from '../components/IncomeExpenseForm'
@@ -11,16 +10,14 @@ import { YearMonthDisplay } from '../components/YearMonthDisplay'
 import { db } from '../firebase'
 import { DisplayType, Item, useIncomeExpense } from '../hooks/useIncomeExpense'
 import { ContentContainer } from '../layouts/ContentContainer'
-// handleSubmitClick: ReturnType<typeof useReservationForm>['handleSubmitClick']
 type ContainerProps = {
   // ayType: ReturnType<typeof useIncomeExpense>['currentDisplayType']
 }
 
 type Props = {
+  amount: number
   category: ReturnType<typeof useIncomeExpense>['category']
   currentDate: Date
-  // currentMonth: ReturnType<typeof useIncomeExpense>['currentMonth']
-  // currentYear: ReturnType<typeof useIncomeExpense>['currentYear']
   currentDisplayType: ReturnType<typeof useIncomeExpense>['currentDisplayType']
   expenseItems: Item[]
   handleExpenseDeleteClick: ReturnType<typeof useIncomeExpense>['handleExpenseDeleteClick']
@@ -39,16 +36,13 @@ type Props = {
 const Component = (props: Props) => (
   <ContentContainer>
     <YearMonthDisplay
-      // currentYear={props.currentYear}
-      // currentMonth={props.currentMonth}
       currentDate={props.currentDate}
       handleLastMonthClick={props.handleLastMonthClick}
       handleNextMonthClick={props.handleNextMonthClick}
-      // incomeItems={props.incomeItems}
-      // expenseItems={props.expenseItems}
     />
     <MonthlyBalance expenseItems={props.expenseItems} incomeItems={props.incomeItems} />
     <IncomeExpenseForm
+      amount={props.amount}
       category={props.category}
       currentDisplayType={props.currentDisplayType}
       handleSubmitClick={props.handleSubmitClick}
@@ -71,11 +65,10 @@ const Component = (props: Props) => (
 
 const Container: React.FC<ContainerProps> = () => {
   const {
+    amount,
     category,
     currentDate,
     currentDisplayType,
-    currentMonth,
-    currentYear,
     expenseItems,
     handleExpenseDeleteClick,
     handleIncomeDeleteClick,
@@ -91,6 +84,7 @@ const Container: React.FC<ContainerProps> = () => {
 
   return (
     <Component
+      amount={amount}
       category={category}
       currentDate={currentDate}
       currentDisplayType={currentDisplayType}

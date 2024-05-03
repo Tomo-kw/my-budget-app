@@ -1,4 +1,5 @@
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import React from 'react'
 import { Cell, Pie, PieChart } from 'recharts'
 
 import { Item } from '../hooks/useIncomeExpense'
@@ -73,7 +74,9 @@ const Component: React.FC<Props> = (props) => {
     <HStack justifyContent={'center'}>
       {/* 支出エリア */}
       <VStack>
-        <Text as={'h3'}>支出一覧</Text>
+        <Text as={'h3'} fontSize={'24px'} fontWeight={'bold'}>
+          支出
+        </Text>
         <PieChart height={300} width={400}>
           <Pie
             cx={'50%'}
@@ -93,7 +96,9 @@ const Component: React.FC<Props> = (props) => {
       </VStack>
       {/* 収入エリア */}
       <VStack>
-        <Text as={'h3'}>収入一覧</Text>
+        <Text as={'h3'} fontSize={'24px'} fontWeight={'bold'}>
+          収入
+        </Text>
         <PieChart height={300} width={400}>
           <Pie
             cx={'50%'}
