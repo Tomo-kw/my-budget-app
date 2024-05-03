@@ -1,6 +1,3 @@
-// ______________________________________________________
-
-import { collection, doc, getDocs } from 'firebase/firestore'
 import { Dispatch, SetStateAction } from 'react'
 
 import { IncomeExpenseForm } from '../components/IncomeExpenseForm'
@@ -8,19 +5,13 @@ import { IncomeExpenseList } from '../components/IncomeExpenseList'
 import { IncomeExpensePieChart } from '../components/IncomeExpensePieChart'
 import { MonthlyBalance } from '../components/MonthlyBalance'
 import { YearMonthDisplay } from '../components/YearMonthDisplay'
-import { db } from '../firebase'
 import { DisplayType, Item, useIncomeExpense } from '../hooks/useIncomeExpense'
 import { ContentContainer } from '../layouts/ContentContainer'
-// handleSubmitClick: ReturnType<typeof useReservationForm>['handleSubmitClick']
-type ContainerProps = {
-  // ayType: ReturnType<typeof useIncomeExpense>['currentDisplayType']
-}
 
 type Props = {
+  amount: number
   category: ReturnType<typeof useIncomeExpense>['category']
   currentDate: Date
-  // currentMonth: ReturnType<typeof useIncomeExpense>['currentMonth']
-  // currentYear: ReturnType<typeof useIncomeExpense>['currentYear']
   currentDisplayType: ReturnType<typeof useIncomeExpense>['currentDisplayType']
   expenseItems: Item[]
   handleExpenseDeleteClick: ReturnType<typeof useIncomeExpense>['handleExpenseDeleteClick']
@@ -29,34 +20,32 @@ type Props = {
   handleNextMonthClick: ReturnType<typeof useIncomeExpense>['handleNextMonthClick']
   handleSubmitClick: ReturnType<typeof useIncomeExpense>['handleSubmitClick']
   incomeItems: Item[]
+  isCurrentMonth: boolean
   setAmount: Dispatch<SetStateAction<number>>
   setCategory: Dispatch<SetStateAction<string>>
   setCurrentDisplayType: Dispatch<SetStateAction<DisplayType>>
-  setType: Dispatch<SetStateAction<string>>
 }
 
-// 以下でデータを渡す
 const Component = (props: Props) => (
   <ContentContainer>
     <YearMonthDisplay
-      // currentYear={props.currentYear}
-      // currentMonth={props.currentMonth}
       currentDate={props.currentDate}
       handleLastMonthClick={props.handleLastMonthClick}
       handleNextMonthClick={props.handleNextMonthClick}
-      // incomeItems={props.incomeItems}
-      // expenseItems={props.expenseItems}
     />
     <MonthlyBalance expenseItems={props.expenseItems} incomeItems={props.incomeItems} />
-    <IncomeExpenseForm
-      category={props.category}
-      currentDisplayType={props.currentDisplayType}
-      handleSubmitClick={props.handleSubmitClick}
-      setAmount={props.setAmount}
-      setCategory={props.setCategory}
-      setCurrentDisplayType={props.setCurrentDisplayType}
-      setType={props.setType}
-    />
+    {/* 現在の月のみ登録できる */}
+    {props.isCurrentMonth && (
+      <IncomeExpenseForm
+        amount={props.amount}
+        category={props.category}
+        currentDisplayType={props.currentDisplayType}
+        handleSubmitClick={props.handleSubmitClick}
+        setAmount={props.setAmount}
+        setCategory={props.setCategory}
+        setCurrentDisplayType={props.setCurrentDisplayType}
+      />
+    )}
     <IncomeExpensePieChart expenseItems={props.expenseItems} incomeItems={props.incomeItems} />
     <IncomeExpenseList
       expenseItems={props.expenseItems}
@@ -69,13 +58,12 @@ const Component = (props: Props) => (
 // ______________________________________________________
 //
 
-const Container: React.FC<ContainerProps> = () => {
+const Container: React.FC = () => {
   const {
+    amount,
     category,
     currentDate,
     currentDisplayType,
-    currentMonth,
-    currentYear,
     expenseItems,
     handleExpenseDeleteClick,
     handleIncomeDeleteClick,
@@ -83,14 +71,15 @@ const Container: React.FC<ContainerProps> = () => {
     handleNextMonthClick,
     handleSubmitClick,
     incomeItems,
+    isCurrentMonth,
     setAmount,
     setCategory,
     setCurrentDisplayType,
-    setType,
   } = useIncomeExpense()
 
   return (
     <Component
+      amount={amount}
       category={category}
       currentDate={currentDate}
       currentDisplayType={currentDisplayType}
@@ -101,10 +90,10 @@ const Container: React.FC<ContainerProps> = () => {
       handleNextMonthClick={handleNextMonthClick}
       handleSubmitClick={handleSubmitClick}
       incomeItems={incomeItems}
+      isCurrentMonth={isCurrentMonth}
       setAmount={setAmount}
       setCategory={setCategory}
       setCurrentDisplayType={setCurrentDisplayType}
-      setType={setType}
     />
   )
 }

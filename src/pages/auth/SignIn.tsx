@@ -1,8 +1,5 @@
 import { Box, Button, Input, Link, Text, VStack } from '@chakra-ui/react'
-import { User } from 'firebase/auth'
-import { useContext } from 'react'
 
-import { AuthContext } from '../../auth/AuthProvider'
 import { useSignIn } from '../../hooks/useSignIn'
 // ______________________________________________________
 //
@@ -12,8 +9,6 @@ type Props = {
   handleEmailChange: ReturnType<typeof useSignIn>['handleEmailChange']
   handlePasswordChange: ReturnType<typeof useSignIn>['handlePasswordChange']
   handleSubmit: ReturnType<typeof useSignIn>['handleSubmit']
-  isLoading: ReturnType<typeof useSignIn>['isLoading']
-  loginUser: User | null
   password: ReturnType<typeof useSignIn>['password']
 }
 // ______________________________________________________
@@ -21,7 +16,9 @@ type Props = {
 const Component = (props: Props) => (
   <form onSubmit={props.handleSubmit}>
     <Box color={'#7d7d7d'} m={'0 auto'} maxW={'500px'} mb={'2rem'} mt={'3rem'} textAlign={'center'}>
-      <Text fontSize={'100px'}>SIGN IN</Text>
+      <Text color={'green.500'} fontSize={'100px'}>
+        SIGN IN
+      </Text>
       <VStack>
         <VStack gap={'1rem'}>
           <Box>
@@ -42,13 +39,7 @@ const Component = (props: Props) => (
             <Input onChange={props.handlePasswordChange} type="password" value={props.password} />
           </Box>
         </VStack>
-        <Button
-          bg={'green.500'}
-          color={'#fff'}
-          isLoading={props.isLoading}
-          mt={'2rem'}
-          type="submit"
-        >
+        <Button bg={'green.500'} color={'#fff'} mt={'2rem'} type="submit">
           SIGN IN
         </Button>
         <Button bg={'red.500'} color={'#fff'} mt={'2rem'}>
@@ -62,10 +53,7 @@ const Component = (props: Props) => (
 //
 
 const Container: React.FC = () => {
-  const { email, handleEmailChange, handlePasswordChange, handleSubmit, isLoading, password } =
-    useSignIn()
-
-  const { loginUser } = useContext(AuthContext)
+  const { email, handleEmailChange, handlePasswordChange, handleSubmit, password } = useSignIn()
 
   return (
     <Component
@@ -73,8 +61,6 @@ const Container: React.FC = () => {
       handleEmailChange={handleEmailChange}
       handlePasswordChange={handlePasswordChange}
       handleSubmit={handleSubmit}
-      isLoading={isLoading}
-      loginUser={loginUser}
       password={password}
     />
   )

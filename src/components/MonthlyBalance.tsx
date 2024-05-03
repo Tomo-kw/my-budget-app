@@ -1,46 +1,44 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
+import { Stack, Text } from '@chakra-ui/react'
+import React from 'react'
 
 import { Item } from '../hooks/useIncomeExpense'
-
-type ContainerProps = Omit<Props, 'incomExpenseAmount' | 'moneyColor'>
+// ______________________________________________________
+//
+type ContainerProps = Omit<Props, 'incomeExpenseAmount' | 'moneyColor'>
 
 type Props = {
   expenseItems: Item[]
-  incomExpenseAmount: number
+  incomeExpenseAmount: number
   incomeItems: Item[]
   moneyColor: string
 }
-
-const Component: React.FC<Props> = (props) => {
-  return (
-    <Stack>
-      <Text fontSize={'30px'} fontWeight={'bold'}>
-        - 収支合計 -
-      </Text>
-      <Text
-        borderBottom={'1px solid #000'}
-        color={props.moneyColor}
-        fontSize={'40px'}
-        paddingBottom={'3px'}
-      >
-        {props.incomExpenseAmount.toLocaleString()}
-        <Text as={'span'}>円</Text>
-      </Text>
-    </Stack>
-  )
-}
-
+// ______________________________________________________
+//
+const Component: React.FC<Props> = (props) => (
+  <Stack>
+    <Text fontSize={'30px'} fontWeight={'bold'}>
+      - 収支合計 -
+    </Text>
+    <Text borderBottom={'1px solid #000'} color={props.moneyColor} fontSize={'40px'}>
+      {props.incomeExpenseAmount.toLocaleString()}
+      <Text as={'span'}>円</Text>
+    </Text>
+  </Stack>
+)
+// ______________________________________________________
+//
 const Container: React.FC<ContainerProps> = (props) => {
+  // 収入の合計金額
   const incomeItemsAmount = props.incomeItems.reduce((total, item) => total + item.amount, 0)
+  // 支出の合計金額
   const expenseItemsAmount = props.expenseItems.reduce((total, item) => total + item.amount, 0)
-  const incomExpenseAmount = incomeItemsAmount - expenseItemsAmount
+  // 収支合計金額
+  const incomeExpenseAmount = incomeItemsAmount - expenseItemsAmount
 
-  let moneyColor = 'blue.600'
-  if (incomExpenseAmount < 0) {
-    moneyColor = 'red.500'
-  }
+  const moneyColor = incomeExpenseAmount < 0 ? 'red.500' : 'blue.600'
 
-  return <Component {...props} incomExpenseAmount={incomExpenseAmount} moneyColor={moneyColor} />
+  return <Component {...props} incomeExpenseAmount={incomeExpenseAmount} moneyColor={moneyColor} />
 }
-
+// ______________________________________________________
+//
 export const MonthlyBalance = Container

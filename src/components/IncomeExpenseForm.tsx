@@ -1,23 +1,27 @@
-import { Button, HStack, Input, Select, Text, VStack } from '@chakra-ui/react'
+import { Button, Flex, HStack, Input, Select, Text, VStack } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
 
 import { DisplayType, useIncomeExpense } from '../hooks/useIncomeExpense'
-
+import { expenseList, incomeList } from './consts/budget'
+// ______________________________________________________
+//
 type ContainerProps = Props
 
 type Props = {
+  amount: number
   category: string
   currentDisplayType: DisplayType
   handleSubmitClick: ReturnType<typeof useIncomeExpense>['handleSubmitClick']
   setAmount: Dispatch<SetStateAction<number>>
   setCategory: Dispatch<SetStateAction<string>>
   setCurrentDisplayType: Dispatch<SetStateAction<DisplayType>>
-  setType: Dispatch<SetStateAction<string>>
 }
+// ______________________________________________________
+//
 
-const Component = (props: Props) => {
-  return (
-    <HStack m={'0 auto'}>
+const Component = (props: Props) => (
+  <HStack flexDirection={{ base: 'column', md: 'row' }} m={'0 auto'}>
+    <Flex flexDirection={{ base: 'column', md: 'row' }} gap={'0.5rem'}>
       <VStack>
         <Text>収支</Text>
         <Select
@@ -33,38 +37,44 @@ const Component = (props: Props) => {
         {/* 支出 */}
         {props.currentDisplayType === 'expense' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
-            {/* TODO:配列にまとめる */}
-            <option value="食費">食費</option>
-            <option value="日用品">日用品</option>
-            <option value="交通費">交通費</option>
-            <option value="衣類">衣類</option>
-            <option value="交際費">交際費</option>
-            <option value="趣味">趣味</option>
-            <option value="貯金">貯金</option>
-            <option value="その他">その他</option>
+            {expenseList.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </Select>
         )}
         {/* 収入 */}
         {props.currentDisplayType === 'income' && (
           <Select onChange={(e) => props.setCategory(e.target.value)} value={props.category}>
-            <option value="給料">給料</option>
-            <option value="その他">その他</option>
+            {incomeList.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </Select>
         )}
       </VStack>
       <VStack>
         <Text>金額</Text>
-        <Input onChange={(e) => props.setAmount(Number(e.target.value))} type="number" />
+        <Input
+          cursor={'pointer'}
+          onChange={(e) => props.setAmount(Number(e.target.value))}
+          type="number"
+          value={props.amount === 0 ? '' : props.amount}
+        />
       </VStack>
-      <Button bg={'green.400'} color={'#fff'} onClick={props.handleSubmitClick} type="submit">
-        登録
-      </Button>
-    </HStack>
-  )
-}
-
+    </Flex>
+    <Button bg={'green.400'} color={'#fff'} onClick={props.handleSubmitClick} type="submit">
+      登録
+    </Button>
+  </HStack>
+)
+// ______________________________________________________
+//
 const Container = (props: ContainerProps) => {
   return <Component {...props} />
 }
-
+// ______________________________________________________
+//
 export const IncomeExpenseForm = Container

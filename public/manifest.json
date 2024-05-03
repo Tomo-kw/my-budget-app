@@ -1,6 +1,6 @@
 {
-  "short_name": "my-budget-app",
-  "name": "Create React App Sample",
+  "short_name": "Budget-app",
+  "name": "My Budget App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,12 +8,17 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "budget_192.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "budget_192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "budget_512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

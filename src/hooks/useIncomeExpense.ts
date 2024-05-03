@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   endAt,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -20,7 +19,6 @@ import { auth, db } from '../firebase'
 
 export type DisplayType = 'expense' | 'income'
 
-// 型ファイル作る？
 export type Item = {
   amount: number
   category: string
@@ -34,6 +32,8 @@ export type Item = {
 }
 
 export const useIncomeExpense = () => {
+  const now = new Date()
+
   const [currentDisplayType, setCurrentDisplayType] = useState<DisplayType>('expense')
 
   // 収入のリスト
@@ -42,33 +42,20 @@ export const useIncomeExpense = () => {
   // 支出のリスト
   const [expenseItems, setExpenseItems] = useState<Item[]>([])
 
-  // 現在の日付
-  const [currentDate, setCurrentDate] = useState(new Date())
+  // 現在開いているページの年月
+  const [currentDate, setCurrentDate] = useState<Date>(new Date())
+
+  // 現在の年月と開いているページの年月が同じかどうか
+  const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true)
 
   const toast = useToast()
 
-  // 現在の日付から月初・月末を求める方法→関数を作れば良い？
-  // 更新後も月を±すればそのまま
-
-  // 表示する年
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
-
-  // 表示する月
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1)
-  const [startDate, setStartDate] = useState(new Date(currentYear, currentMonth - 1, 1, 0, 0, 0))
-  const [endDate, setEndDate] = useState(new Date(currentYear, currentMonth, 0, 23, 59, 59))
-
-  // 登録する値を格納する
   // 収入 or 支出の金額
   const [amount, setAmount] = useState<number>(0)
 
-  // 収入・支出のどちらか
-  const [type, setType] = useState<string>('expense')
-
   const [category, setCategory] = useState<string>('食費')
 
-  // firebaseからデータを取得する→先月・次月で変更する：第二引数
-  // 変更する必要があるもの：startDate,endDate
+  // firebaseからデータを取得する
   useEffect(() => {
     // 収入
     getIncomData()
@@ -138,16 +125,14 @@ export const useIncomeExpense = () => {
   const getStartDate = (date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth()
-    const startDate = new Date(year, month, 1, 0, 0, 0)
-    return startDate
+    return new Date(year, month, 1, 0, 0, 0)
   }
   // 月末を取得する
   const getEndDate = (date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth()
     const lastDayOfMonth = new Date(year, month + 1, 0)
-    const endDate = new Date(year, month, lastDayOfMonth.getDate(), 23, 59, 59)
-    return endDate
+    return new Date(year, month, lastDayOfMonth.getDate(), 23, 59, 59)
   }
 
   useEffect(() => {
@@ -160,22 +145,28 @@ export const useIncomeExpense = () => {
 
   // 収支の登録処理
   const handleSubmitClick = () => {
-    auth.currentUser!.uid
     // firebaseのデータベースにデータを追加する
-    // e.preventDefault()
-    let seveDb = ''
-    if (currentDisplayType === 'expense') {
-      seveDb = 'expenseItems'
-    } else {
-      seveDb = 'incomeItems'
+    const seveDb = currentDisplayType === 'expense' ? 'expenseItems' : 'incomeItems'
+
+    if (amount <= 0) {
+      toast({
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+        status: 'error',
+        title: '金額を入力してください',
+      })
+      return
     }
 
     addDoc(collection(db, seveDb), {
       amount: amount,
       category: category,
       timestamp: serverTimestamp(),
-      uid: auth.currentUser?.uid,
+      uid: auth.currentUser!.uid,
     })
+
+    setAmount(0)
 
     toast({
       duration: 9000,
@@ -186,18 +177,30 @@ export const useIncomeExpense = () => {
     })
   }
 
-  // 先月分の収支画面を表示する
+  // 来月分の収支画面を表示する
   const handleNextMonthClick = () => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
-    setCurrentDate(new Date(year, month + 1))
+    let currentYear = currentDate.getFullYear()
+    let currentMonth = currentDate.getMonth()
+    if (currentMonth > 11) {
+      // 12月の場合は翌年の1月にする
+      currentMonth = 0
+      currentYear += 1
+    }
+    setCurrentDate(new Date(currentYear, currentMonth + 1))
+    checkMonthEquality(currentYear, currentMonth + 1)
   }
 
   // 先月分の収支画面を表示する
   const handleLastMonthClick = () => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
-    setCurrentDate(new Date(year, month - 1))
+    let currentYear = currentDate.getFullYear()
+    let currentMonth = currentDate.getMonth()
+    if (currentMonth < 0) {
+      // 1月の場合は前年の12月にする
+      currentYear -= 1
+      currentMonth = 11
+    }
+    setCurrentDate(new Date(currentYear, currentMonth - 1))
+    checkMonthEquality(currentYear, currentMonth - 1)
   }
 
   // 支出データを削除する
@@ -224,12 +227,16 @@ export const useIncomeExpense = () => {
     })
   }
 
+  // 現在の年月と開いているページの年月が同じかどうかの判定
+  const checkMonthEquality = (currentYear: number, currentMonth: number) => {
+    setIsCurrentMonth(now.getFullYear() === currentYear && now.getMonth() === currentMonth)
+  }
+
   return {
+    amount,
     category,
     currentDate,
     currentDisplayType,
-    currentMonth,
-    currentYear,
     expenseItems,
     handleExpenseDeleteClick,
     handleIncomeDeleteClick,
@@ -237,9 +244,9 @@ export const useIncomeExpense = () => {
     handleNextMonthClick,
     handleSubmitClick,
     incomeItems,
+    isCurrentMonth,
     setAmount,
     setCategory,
     setCurrentDisplayType,
-    setType,
   }
 }
