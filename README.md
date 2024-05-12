@@ -1,46 +1,110 @@
-# Getting Started with Create React App
+# my-budget-app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React の学習として家計簿アプリを作成
+ゼロから作り上げることが目的のため、デザインに関しては重点を置いていない。
 
-## Available Scripts
+## URL
 
-In the project directory, you can run:
+https://my-budget-app-97ffd.web.app/
 
-### `npm start`
+## 使用方法
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- アカウントがない場合
+  - 「SIGN UP」よりメールアドレス・パスワードを入力してアカウント作成
+- アカウントがある場合
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  - 「SIGN IN」よりメールアドレス・パスワードを入力してログイン
 
-### `npm test`
+- 「収入・支出」、「カテゴリ」を選択して「登録」ボタンを押下する
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### ※注意
 
-### `npm run build`
+現在は当月のみの収支入力しかできません
+（次月・前月の入力は今後対応していく予定です）
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 画像
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Main  
+![image](https://github.com/Tomo-kw/my-budget-app/assets/68243050/366bc184-a627-4273-8798-f33d4610bee7)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+SIGN IN  
+![image](https://github.com/Tomo-kw/my-budget-app/assets/68243050/cbc52eb6-845c-4970-b08a-749ff821a26f)
 
-### `npm run eject`
+SIGN UP  
+![image](https://github.com/Tomo-kw/my-budget-app/assets/68243050/4cbacf85-0514-4c10-954a-fbdfcd7c477c)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 構成
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| 項目       | 用途                       | バージョン |
+| ---------- | -------------------------- | ---------- |
+| React      | ---                        | 18.2.0     |
+| TypeScript | ---                        | 4.9.5      |
+| ESLint     | 静的解析ツール             | 8.45.0     |
+| Prettier   | コードフォーマッター       | 3.0.0      |
+| firebase   | アプリ開発プラットフォーム | 10.3.0     |
+| recharts   | グラフ描画トライブラリ     | 2.7.3      |
+| Chakra-UI  | UIライブラリ               | 2.8.0      |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## ディレクトリ構成：主要ファイル
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+src
+├── App.tsx
+├── auth
+│   ├── AuthProvider.tsx
+│   └── PrivateRoute.tsx
+├── components
+│   ├── Header.tsx
+│   ├── IncomeExpenseForm.tsx
+│   ├── IncomeExpenseList.tsx
+│   ├── IncomeExpensePieChart.tsx
+│   ├── MonthlyBalance.tsx
+│   ├── YearMonthDisplay.tsx
+│   ├── consts
+│   │   └── budget.ts
+│   ├── item
+│   │   ├── BudgetItem.tsx
+│   │   ├── BudgetItemList.tsx
+│   │   ├── IncomeExpenseDisplayItem.tsx
+│   │   └── SignItem.tsx
+│   └── theme
+│       └── theme.ts
+├── firebase.ts
+├── hooks
+│   ├── useIncomeExpense.ts
+│   ├── useSignIn.ts
+│   ├── useSignOut.ts
+│   └── useSignUp.ts
+├── index.tsx
+├── layouts
+│   └── ContentContainer.tsx
+├── pages
+│   ├── IncomeExpense.tsx
+│   └── auth
+│       ├── SignIn.tsx
+│       └── SignUp.tsx
+└── react-app-env.d.ts
+```
 
-## Learn More
+## Installation
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- React
+  - `npx create-react-app budget-app --template typescript`
+- Firebase
+  - `npm install -g firebase-tools`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+
+- ローカルブラウザで表示
+  - `npm start`
+  - http://localhost:3000
+- Webで表示
+  - `firebase init`
+  - `firebase login`
+  - `npm run build`
+  - `firebase deploy --only hosting,storage,firestore`
+
+## 残課題・今後実装したいこと
+
+- 当月しか家計簿の登録ができないため、次月・前月も登録できるようにする
+- デザインが適当なのでどこかで整えたい
