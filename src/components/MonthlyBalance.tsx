@@ -60,8 +60,6 @@ const Container: React.FC<ContainerProps> = (props) => {
 
   const moneyColor = incomeExpenseAmount < 0 ? 'red.500' : 'blue.600'
 
-  console.log('収入', incomeItemsAmount)
-  console.log('支出', expenseItemsAmount)
   return (
     <Component
       {...props}

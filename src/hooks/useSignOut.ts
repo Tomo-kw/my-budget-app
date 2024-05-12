@@ -9,7 +9,6 @@ export const useSignOut = () => {
   const handleSubmit = async () => {
     await signOut(auth)
       .then(() => {
-        console.log('ログアウトOK')
         toast({
           duration: 9000,
           isClosable: true,

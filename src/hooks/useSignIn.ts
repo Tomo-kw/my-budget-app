@@ -23,8 +23,6 @@ export const useSignIn = () => {
 
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log('ログインOK')
-
         toast({
           duration: 9000,
           isClosable: true,
@@ -39,7 +37,6 @@ export const useSignIn = () => {
         const errorMessage = error.message
         console.log(errorCode)
         console.log(errorMessage)
-        console.log('ログインNG')
         toast({
           description: errorMessage,
           duration: 9000,
