@@ -1,29 +1,52 @@
-import { Stack, Text } from '@chakra-ui/react'
+import { Stack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 import { Item } from '../hooks/useIncomeExpense'
+import { IncomeExpenseDisplayItem } from './item/IncomeExpenseDisplayItem'
 // ______________________________________________________
 //
-type ContainerProps = Omit<Props, 'incomeExpenseAmount' | 'moneyColor'>
+type ContainerProps = Omit<
+  Props,
+  'incomeExpenseAmount' | 'moneyColor' | 'incomeItemsAmount' | 'expenseItemsAmount'
+>
 
 type Props = {
   expenseItems: Item[]
+  expenseItemsAmount: number
   incomeExpenseAmount: number
   incomeItems: Item[]
+  incomeItemsAmount: number
   moneyColor: string
 }
 // ______________________________________________________
 //
 const Component: React.FC<Props> = (props) => (
-  <Stack>
-    <Text fontSize={'30px'} fontWeight={'bold'}>
-      - 収支合計 -
-    </Text>
-    <Text borderBottom={'1px solid #000'} color={props.moneyColor} fontSize={'40px'}>
-      {props.incomeExpenseAmount.toLocaleString()}
-      <Text as={'span'}>円</Text>
-    </Text>
-  </Stack>
+  <VStack borderBottom={'1px solid #000'} pb={2} spacing={'6'} width={'100%'}>
+    <VStack>
+      <Text fontSize={'30px'} fontWeight={'bold'}>
+        - 残高 -
+      </Text>
+      <Text color={props.moneyColor} fontSize={'40px'} fontWeight={'bold'} width={'100%'}>
+        {props.incomeExpenseAmount.toLocaleString()}
+        <Text as={'span'} fontSize={'30px'} fontWeight={'normal'}>
+          円
+        </Text>
+      </Text>
+    </VStack>
+    {/* 収支を表示する */}
+    <Stack direction={{ base: 'column', lg: 'row' }} spacing={'8'}>
+      <IncomeExpenseDisplayItem
+        label={'支出'}
+        labelColor={'red.400'}
+        totalAmount={props.expenseItemsAmount}
+      />
+      <IncomeExpenseDisplayItem
+        label={'収入'}
+        labelColor={'green.500'}
+        totalAmount={props.incomeItemsAmount}
+      />
+    </Stack>
+  </VStack>
 )
 // ______________________________________________________
 //
@@ -37,7 +60,17 @@ const Container: React.FC<ContainerProps> = (props) => {
 
   const moneyColor = incomeExpenseAmount < 0 ? 'red.500' : 'blue.600'
 
-  return <Component {...props} incomeExpenseAmount={incomeExpenseAmount} moneyColor={moneyColor} />
+  console.log('収入', incomeItemsAmount)
+  console.log('支出', expenseItemsAmount)
+  return (
+    <Component
+      {...props}
+      expenseItemsAmount={expenseItemsAmount}
+      incomeExpenseAmount={incomeExpenseAmount}
+      incomeItemsAmount={incomeItemsAmount}
+      moneyColor={moneyColor}
+    />
+  )
 }
 // ______________________________________________________
 //
