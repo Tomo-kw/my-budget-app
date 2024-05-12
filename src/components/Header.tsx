@@ -28,7 +28,7 @@ const Component: React.FC<Props> = (props) => (
     </Text>
     <HStack color={'gray.500'} spacing={8}>
       <VStack>
-        <Text color={'#000'} fontSize={'20px'}>
+        <Text color={'#000'} fontSize={{ base: '16px', lg: '20px' }}>
           ログインユーザー
         </Text>
         <Text fontSize={'18px'}>{props.loginUser?.email}</Text>
@@ -38,7 +38,9 @@ const Component: React.FC<Props> = (props) => (
           SIGN OUT
         </Button>
       ) : (
-        <Text color={'#7d7d7d'}>ログアウト中</Text>
+        <Text color={'#7d7d7d'} fontSize={{ base: '16px', lg: '20px' }}>
+          ログアウト中
+        </Text>
       )}
     </HStack>
   </Heading>

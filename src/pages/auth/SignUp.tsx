@@ -1,5 +1,4 @@
-import { Box, Button, Input, Link, Text, VStack } from '@chakra-ui/react'
-
+import { SignItem } from '../../components/item/SignItem'
 import { useSignUp } from '../../hooks/useSignUp'
 // ______________________________________________________
 //
@@ -14,40 +13,18 @@ type Props = {
 // ______________________________________________________
 //
 const Component = (props: Props) => (
-  <form onSubmit={props.handleSubmit}>
-    <Box color={'#7d7d7d'} m={'0 auto'} maxW={'500px'} mb={'2rem'} mt={'3rem'} textAlign={'center'}>
-      <Text color={'red.500'} fontSize={'100px'}>
-        SIGN UP
-      </Text>
-      <VStack>
-        <VStack gap={'1rem'}>
-          <Box>
-            <Text fontSize={'24px'} textAlign={'left'}>
-              Email
-            </Text>
-            <Input
-              onChange={props.handleEmailChange}
-              placeholder="aaabbb@example.com"
-              type="email"
-              value={props.email}
-            />
-          </Box>
-          <Box>
-            <Text fontSize={'24px'} textAlign={'left'}>
-              Password
-            </Text>
-            <Input onChange={props.handlePasswordChange} type="password" value={props.password} />
-          </Box>
-        </VStack>
-        <Button bg={'red.500'} color={'#fff'} mt={'2rem'} type="submit">
-          SIGN UP
-        </Button>
-        <Button bg={'green.500'} color={'#fff'} mt={'2rem'}>
-          <Link href="/signin">SIGN IN</Link>
-        </Button>
-      </VStack>
-    </Box>
-  </form>
+  <SignItem
+    currentColor="red.500"
+    currentLabel="SIGN UP"
+    email={props.email}
+    handleEmailChange={props.handleEmailChange}
+    handlePasswordChange={props.handlePasswordChange}
+    handleSubmit={props.handleSubmit}
+    password={props.password}
+    toggleColor="green.500"
+    toggleLabel="SIGN IN"
+    url="/signin"
+  />
 )
 // ______________________________________________________
 //

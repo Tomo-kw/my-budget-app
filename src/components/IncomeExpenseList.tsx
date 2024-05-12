@@ -1,9 +1,8 @@
-import { HStack, Text, VStack } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react'
 import React from 'react'
 
 import { Item, useIncomeExpense } from '../hooks/useIncomeExpense'
 import { BudgetItem } from './item/BudgetItem'
-import { BudgetItemList } from './item/BudgetItemList'
 // ______________________________________________________
 //
 type ContainerProps = Props
@@ -16,8 +15,8 @@ type Props = {
 // ______________________________________________________
 //
 const Component: React.FC<Props> = (props) => (
-  <HStack
-    alignItems={'baseline'}
+  <Stack
+    alignItems={{ base: 'center', lg: 'flex-start' }}
     flexDirection={{ base: 'column', md: 'row' }}
     gap={10}
     justifyContent={'space-evenly'}
@@ -32,7 +31,7 @@ const Component: React.FC<Props> = (props) => (
       handleBudgetDeleteClick={props.handleIncomeDeleteClick}
       label="収入"
     />
-  </HStack>
+  </Stack>
   //
 )
 // ______________________________________________________
